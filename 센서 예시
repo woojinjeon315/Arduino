@@ -1,0 +1,48 @@
+// Wemos D1 Mini의 아날로그 핀은 A0 하나만 존재합니다.
+const int soundAnalogPin = A0; 
+
+void setup() {
+  // 컴퓨터와 통신할 속도를 설정합니다. (시리얼 모니터도 115200으로 맞춰야 합니다.)
+  Serial.begin(115200); 
+  
+  // 아날로그 핀을 입력 모드로 설정합니다.
+  pinMode(soundAnalogPin, INPUT);
+}
+
+void loop() {
+  // analogRead() 메소드로 센서의 전압(소리 크기)을 읽어옵니다. (반환 값: 0 ~ 1023)
+  int soundValue = analogRead(soundAnalogPin);
+  
+  // 읽어온 값을 시리얼 모니터에 출력합니다.
+  Serial.print("Sound Analog Value: ");
+  Serial.println(soundValue);
+  
+  // 너무 빠르게 화면이 넘어가므로 0.1초(100ms)의 대기 시간을 줍니다.
+  delay(100);
+}
+
+
+
+// 센서의 DO(Digital Out) 핀을 Wemos D1 Mini의 D2 핀에 연결합니다.
+const int soundDigitalPin = D2; 
+
+void setup() {
+  Serial.begin(115200);
+  
+  // 디지털 핀을 입력 모드로 설정합니다.
+  pinMode(soundDigitalPin, INPUT);
+}
+
+void loop() {
+  // digitalRead() 메소드로 현재 핀의 상태가 HIGH(1)인지 LOW(0)인지 읽어옵니다.
+  int soundState = digitalRead(soundDigitalPin);
+  
+  // 센서 종류에 따라 소리가 날 때 HIGH(1)가 되거나 LOW(0)가 됩니다.
+  // 보통 소리가 감지되면 HIGH(1)가 되는 경우가 많습니다.
+  if (soundState == HIGH) {
+    Serial.println("소리 감지됨! (Sound Detected!)");
+    
+    // 감지되었을 때 순간적인 중복 출력을 막기 위해 약간의 대기 시간을 줍니다.
+    delay(500); 
+  }
+}
